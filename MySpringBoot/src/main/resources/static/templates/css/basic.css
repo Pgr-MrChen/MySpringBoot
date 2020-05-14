@@ -1,0 +1,19 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+._header {
+    height: 80px;
+    width: 100%;
+}
+
+._main {
+    height: 500px;
+    width: 100%;
+}
+
+._footer {
+    height: 150px;
+    width: 100%;
+}

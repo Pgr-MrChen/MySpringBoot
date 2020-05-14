@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/templates/css/basic.css" type="text/css">
+    <link rel="stylesheet" href="../static/templates/css/login.css" type="text/css">
+    <title>登陆</title>
+</head>
+<body>
+<section class="_layout ">
+    <section class="_header">
+        <section class="func">
+            <button class="register">注册</button>
+        </section>
+
+    </section>
+    <section class="_main">
+        <section class="pwd_login main_login">
+            <p class="method">账号密码登录</p>
+            <section class="wrapper">
+                <div class="input_username">
+                    <input type="text" placeholder="输入账户名称" class="username">
+                </div>
+                <div class="input_password">
+                    <input type="password" placeholder="输入密码" class="password">
+                </div>
+                <section class="login">
+                    <button class="login_btn pwd_login_btn">
+                        登录
+                    </button>
+                    <button class="switch_method captcha_switch_method">
+                        验证码登录
+                    </button>
+                </section>
+            </section>
+        </section>
+
+        <section class="captcha_login main_login">
+            <p class="method">验证码登录</p>
+            <section class="wrapper">
+                <div class="input_telephone">
+                    <input type="tel" placeholder="输入11位手机号" class="telephone">
+                </div>
+                <div class="input_captcha">
+                    <input type="text" placeholder="输入验证码" class="captcha">
+                    <button class="send_code">获取验证码</button>
+                </div>
+                <section class="login">
+                    <button class="login_btn captcha_login_btn">
+                        登录
+                    </button>
+                    <button class="switch_method pwd_switch_method">
+                        密码登录
+                    </button>
+                </section>
+            </section>
+        </section>
+        <section class="login_background">
+            <img class="but_img" src="../static/templates/img/background.svg">
+        </section>
+
+
+    </section>
+    <section class="_footer">
+
+    </section>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="../static/templates/js/login.js"></script>
+</body>
+</html>
