@@ -7,23 +7,22 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * 商店用户实体类
+ * 用户实体类
  */
 @Entity
 @Data
-public class ShopInfoUsers {
+public class UserInfo {
     @Id
-    private Integer id;
-
-    //账号
-    private String username;
-
-    //昵称
-    private String nickname;
+    private Long id;
 
     private String email;
 
     private String telephone;
+
+    //昵称
+    private String nickname;
+
+    private Integer roleId;
 
     private String sex;
 
@@ -36,5 +35,11 @@ public class ShopInfoUsers {
 
     //是否身份认证，默认为0未认证
     private Integer isauth = IsAuthEnum.NO_AUTH.getCode();
+
+    //token码
+    private String token;
+
+    //token码过期时间
+    private String tokenTimeout;
 
 }

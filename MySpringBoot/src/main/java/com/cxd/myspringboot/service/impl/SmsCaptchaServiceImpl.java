@@ -1,8 +1,8 @@
 package com.cxd.myspringboot.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cxd.myspringboot.dao.ShopTmpUserscodeDao;
-import com.cxd.myspringboot.entity.ShopTmpUserscode;
+import com.cxd.myspringboot.dao.PhonecodeDao;
+import com.cxd.myspringboot.entity.Phonecode;
 import com.cxd.myspringboot.enums.ResultEnum;
 import com.cxd.myspringboot.exception.MySpringBootException;
 import com.cxd.myspringboot.service.SmsCaptchaService;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class SmsCaptchaServiceImpl implements SmsCaptchaService {
     @Autowired
-    private ShopTmpUserscodeDao shopTmpUserscodeDao;
+    private PhonecodeDao phonecodeDao;
 
     //发送短信验证码
     @Override
@@ -38,9 +38,9 @@ public class SmsCaptchaServiceImpl implements SmsCaptchaService {
             log.error("【发送短信】发送短信错误");
             return resCode;
         } else {
-            ShopTmpUserscode shopTmpUserscode = shopTmpUserscodeDao.findByTelephone(telephone);
-            shopTmpUserscode.setCode(code);
-            shopTmpUserscodeDao.save(shopTmpUserscode);
+            Phonecode phonecode = phonecodeDao.findByTelephone(telephone);
+            phonecode.setCode(code);
+            phonecodeDao.save(phonecode);
             return resCode;
         }
 
@@ -49,16 +49,16 @@ public class SmsCaptchaServiceImpl implements SmsCaptchaService {
     //创建短信验证码关系表
     @Override
     @Transactional
-    public ShopTmpUserscode createSmsCaptcha(String telephone) {
+    public Phonecode createSmsCaptcha(String telephone) {
         //判断电话是否已经存在
-        ShopTmpUserscode shopTmpUserscode = shopTmpUserscodeDao.findByTelephone(telephone);
-        if (shopTmpUserscode != null) {
-            return shopTmpUserscode;
+        Phonecode phonecode = phonecodeDao.findByTelephone(telephone);
+        if (phonecode != null) {
+            return phonecode;
 
         } else {
-            ShopTmpUserscode shopTmpUserscode1 = new ShopTmpUserscode();
-            shopTmpUserscode1.setTelephone(telephone);
-            ShopTmpUserscode result = shopTmpUserscodeDao.save(shopTmpUserscode1);
+            Phonecode phonecode1 = new Phonecode();
+            phonecode1.setTelephone(telephone);
+            Phonecode result = phonecodeDao.save(phonecode1);
             if (result == null) {
                 log.error("【创建验证码】创建短信验证码表失败。telephone={}", telephone);
                 throw new MySpringBootException(ResultEnum.SHOPUSER_CREATE_CODE_ERROR);

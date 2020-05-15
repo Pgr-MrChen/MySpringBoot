@@ -3,30 +3,51 @@ package com.cxd.myspringboot.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Restful类
+ * @param <T>
+ */
+
 @Setter
 @Getter
 public class ResultDTO <T> {
-    private static final int SUCCESS = 200;
-    private static final int FAILED = 500;
     private int code;
     private String message;
     private T data;
 
-    public ResultDTO() {
+    private ResultDTO() {
     }
 
-    public ResultDTO(int code, String message) {
-        this.code = code;
-        this.message = message;
+    private ResultDTO(CodeMsgDTO codeMsgDTO) {
+        this.code = codeMsgDTO.getCode();
+        this.message = codeMsgDTO.getMessage();
     }
 
-    public ResultDTO( T data) {
+    private ResultDTO( T data) {
+        this.code = 200;
+        this.message = "请求成功。";
         this.data = data;
     }
 
-    public ResultDTO(int code, String message, T data) {
-        this.code = code;
-        this.message = message;
+    private ResultDTO(CodeMsgDTO codeMsgDTO, T data) {
+        this.code = codeMsgDTO.getCode();
+        this.message = codeMsgDTO.getMessage();
         this.data = data;
+    }
+
+
+    //请求成功，不需返回参数
+    public static ResultDTO success() {
+        return success(null);
+    }
+
+    //请求成功，需返回参数
+    public static <T> ResultDTO<T> success(T data) {
+        return new ResultDTO<T>(data);
+    }
+
+    //请求失败时调用
+    public static ResultDTO error(CodeMsgDTO codeMsgDTO) {
+        return new ResultDTO(codeMsgDTO);
     }
 }

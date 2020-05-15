@@ -1,7 +1,7 @@
 package com.cxd.myspringboot.service.impl;
 
-import com.cxd.myspringboot.dao.ShopTmpUserscodeDao;
-import com.cxd.myspringboot.entity.ShopTmpUserscode;
+import com.cxd.myspringboot.dao.PhonecodeDao;
+import com.cxd.myspringboot.entity.Phonecode;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 class CaptchaServiceImplTest {
 
     @Autowired
-    private ShopTmpUserscodeDao shopTmpUserscodeDao;
+    private PhonecodeDao phonecodeDao;
 
 
     @Test
     void updateCode() {
-        ShopTmpUserscode shopTmpUserscode = shopTmpUserscodeDao.findByTelephone("15111888341");
-        shopTmpUserscode.setCode("1234");
-        shopTmpUserscodeDao.save(shopTmpUserscode);
+        Phonecode phonecode = phonecodeDao.findByTelephone("15111888341");
+        phonecode.setCode("1234");
+        phonecodeDao.save(phonecode);
     }
 }

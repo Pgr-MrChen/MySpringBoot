@@ -12,20 +12,19 @@ import javax.persistence.Id;
  */
 @Entity
 @Data
-public class ShopTmpUserscode {
+public class Phonecode {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String telephone;
 
     //短信验证码
     private String code;
 
-    public ShopTmpUserscode() {
+    public Phonecode() {
     }
 
-    public ShopTmpUserscode(Integer id, String telephone, String code) {
+    public Phonecode(Long id, String telephone, String code) {
         this.id = id;
         this.telephone = telephone;
         this.code = code;

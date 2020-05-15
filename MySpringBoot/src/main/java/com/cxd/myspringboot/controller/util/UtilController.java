@@ -18,8 +18,8 @@ public class UtilController {
 
     @GetMapping("/getIP")
     public String getIPAdr(HttpServletRequest request) {
-        String ipAdr = IPUtil.getIpAddr(request);
-        System.out.println(ipAdr);
+        String ipAddr = IPUtil.getIpAddr(request);
+        System.out.println(ipAddr);
         return "你已被我获取ip地址，请注意人身安全。";
     }
 

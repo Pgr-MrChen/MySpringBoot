@@ -14,6 +14,8 @@ public class ShopUserDTO {
     //昵称
     private String nickname;
 
+    private Integer roleId;
+
     private String email;
 
     private String telephone;

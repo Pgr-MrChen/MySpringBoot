@@ -33,19 +33,19 @@ public class KeyUtil {
     public static synchronized String getNickname() {
         Random random = new Random();
         Integer nickname = random.nextInt(900000) + 100000;
-        return "Unarke" + String.valueOf(nickname);
+        return "suiyuan" + String.valueOf(nickname);
     }
 
     //获取密码盐
     public static synchronized String getSalt() {
         Random random = new Random();
-        Integer username = random.nextInt(90000000) + 10000000;
-        return System.currentTimeMillis() + String.valueOf(username);
+        Integer slat = random.nextInt(90000000) + 10000000;
+        return System.currentTimeMillis() + String.valueOf(slat);
     }
 
-    //获取短信验证码
+    //获取6位数短信验证码
     public static String getCaptcha() {
-        int code = new Random().nextInt(9000) + 1000;
+        int code = new Random().nextInt(900000) + 100000;
         return "" + code;
     }
 }

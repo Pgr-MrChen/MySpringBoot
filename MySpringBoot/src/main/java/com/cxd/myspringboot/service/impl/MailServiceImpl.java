@@ -13,6 +13,10 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 
+/**
+ *
+ * 发送邮件
+ */
 @Service
 public class MailServiceImpl implements MailService {
 

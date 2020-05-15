@@ -1,16 +1,15 @@
 package com.cxd.myspringboot.controller;
 
-import com.cxd.myspringboot.dao.ShopInfoUsersDao;
-import com.cxd.myspringboot.dao.ShopTmpUserscodeDao;
+import com.cxd.myspringboot.dao.UserInfoDao;
+import com.cxd.myspringboot.dao.PhonecodeDao;
+import com.cxd.myspringboot.dto.CodeMsgDTO;
 import com.cxd.myspringboot.dto.ResultDTO;
 import com.cxd.myspringboot.dto.ShopUserDTO;
-import com.cxd.myspringboot.entity.ShopInfoUsers;
-import com.cxd.myspringboot.entity.ShopTmpUserscode;
+import com.cxd.myspringboot.entity.UserInfo;
+import com.cxd.myspringboot.entity.Phonecode;
 
-import com.cxd.myspringboot.entity.ShopUserToken;
-import com.cxd.myspringboot.service.ShopUsersService;
+import com.cxd.myspringboot.service.UserService;
 import com.cxd.myspringboot.service.SmsCaptchaService;
-import com.cxd.myspringboot.service.impl.UserTokenServiceImpl;
 import com.cxd.myspringboot.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +24,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/demo")
 public class TestController {
     @Autowired
-    private ShopInfoUsersDao shopInfoUsersDao;
+    private UserInfoDao userInfoDao;
 
     @Autowired
-    private ShopTmpUserscodeDao shopTmpUserscodeDao;
+    private PhonecodeDao phonecodeDao;
 
     @Autowired
-    private ShopUsersService shopUsersService;
+    private UserService userService;
 
     @Autowired
     private SmsCaptchaService smsCaptchaService;
 
-    @Autowired
-    private UserTokenServiceImpl userTokenService;
 
     @Value(value = "${spring.mail.username}")
     private String from;
@@ -52,8 +49,8 @@ public class TestController {
                               @RequestParam("telephone") String telephone,
                               @RequestParam("captcha") String code) {
         //查询验证码是否正确
-        ShopTmpUserscode shopTmpUserscode = shopTmpUserscodeDao.findByTelephone(telephone);
-        String yzm = shopTmpUserscode.getCode();
+        Phonecode phonecode = phonecodeDao.findByTelephone(telephone);
+        String yzm = phonecode.getCode();
         if (yzm.equals(code)) {
             ShopUserDTO shopUserDTO = new ShopUserDTO();
             shopUserDTO.setUsername(username);
@@ -61,17 +58,17 @@ public class TestController {
             shopUserDTO.setTelephone(telephone);
 
             //判断用户名是否存在
-            if (shopInfoUsersDao.findByUsername(shopUserDTO.getUsername()) != null) {
+            if (userInfoDao.findByUsername(shopUserDTO.getUsername()) != null) {
                 log.info("【用户注册】 用户已存在。shopInfoUser={}", shopUserDTO);
                 return new ResultDTO(101, "用户已存在", new String(""));
             }
             log.info("开始注册用户信息");
             //创建商户信息
-            ShopInfoUsers shopInfoUsers = shopUsersService.createShopUserByPwd(shopUserDTO);
+            UserInfo userInfo = userService.createShopUserByPwd(shopUserDTO);
 
             log.info("开始创建用户token表");
             //创建token
-            userTokenService.createToken(shopInfoUsers);
+            userTokenService.createToken(userInfo);
             return new ResultDTO(102, "用户创建成功", new String(""));
         } else {
             System.out.println("验证码错误");
@@ -85,14 +82,14 @@ public class TestController {
     @PostMapping("/register/msgRegister")
     public ResultDTO register(@RequestParam("telephone") String telephone){
         //判断用户名是否存在
-        if (shopInfoUsersDao.findByTelephone(telephone) != null){
+        if (userInfoDao.findByTelephone(telephone) != null){
             log.info("【用户注册】 用户已存在。telephone={}",telephone);
             return new ResultDTO(101, "用户已存在", new String(""));
         }
 
 
         //创建商户信息表
-        ShopInfoUsers shopInfoUsers = shopInfoUsersService.createShopUserBySms(telephone);
+        UserInfo shopInfoUsers = shopInfoUsersService.createShopUserBySms(telephone);
 
         //创建token
         userTokenService.createToken(shopInfoUsers);
@@ -104,11 +101,11 @@ public class TestController {
     public ResultDTO pwdLogin(@RequestParam("username") String username,
                               @RequestParam("password") String password) {
         //查询账号是否存在
-        ShopInfoUsers shopInfoUsers = shopInfoUsersDao.findByUsername(username);
-        if (shopInfoUsers != null) {
+        UserInfo userInfo = userInfoDao.findByUsername(username);
+        if (userInfo != null) {
             //判断密码是否正确
-            if (shopInfoUsers.getPassword().equals(MD5Util.pwdMD5(password, shopInfoUsers.getSalt()))) {
-                ShopUserToken shopUserToken = userTokenService.updateToken(shopInfoUsers);
+            if (userInfo.getPassword().equals(MD5Util.pwdMD5(password, userInfo.getSalt()))) {
+                ShopUserToken shopUserToken = userTokenService.updateToken(userInfo);
                 String data = shopUserToken.getToken();
                 return new ResultDTO(200, "成功", data);
             } else {
@@ -116,7 +113,7 @@ public class TestController {
             }
         } else {
             log.info("账号不存在");
-            return new ResultDTO(202, "账户不存在", new String(""));
+            return ResultDTO.error(CodeMsgDTO.USER_NOT_EXIST);
         }
 
     }
@@ -125,12 +122,12 @@ public class TestController {
     @PostMapping(value = "/msgLogin")
     public ResultDTO msgLogin(@RequestParam("telephone") String telephone,
                               @RequestParam("code") String code) {
-        ShopTmpUserscode shopTmpUserscode = shopTmpUserscodeDao.findByTelephone(telephone);
-        if (shopTmpUserscode != null) {
-            String yzm = shopTmpUserscode.getCode();
+        Phonecode phonecode = phonecodeDao.findByTelephone(telephone);
+        if (phonecode != null) {
+            String yzm = phonecode.getCode();
             if (yzm.equals(code)) {
-                ShopInfoUsers shopInfoUsers = shopInfoUsersDao.findByTelephone(telephone);
-                ShopUserToken shopUserToken = userTokenService.updateToken(shopInfoUsers);
+                UserInfo userInfo = userInfoDao.findByTelephone(telephone);
+                ShopUserToken shopUserToken = userTokenService.updateToken(userInfo);
                 String data = shopUserToken.getToken();
                 ResultDTO resultDTO = new ResultDTO(200, "成功", data);
                 return resultDTO;
@@ -141,8 +138,7 @@ public class TestController {
             }
         } else {
             System.out.println("该手机号并未注册");
-            ResultDTO resultDTO = new ResultDTO(500, "账户不存在", new String(""));
-            return resultDTO;
+            return ResultDTO.error(CodeMsgDTO.USER_NOT_EXIST);
         }
 
 
@@ -152,15 +148,13 @@ public class TestController {
     @PostMapping("/smsLogin")
     public ResultDTO smsLogin(@RequestParam("telephone") String telephone) {
         //查询账户是否存在
-        ShopInfoUsers shopInfoUsers = shopInfoUsersDao.findByTelephone(telephone);
-        if (shopInfoUsers != null) {   //如果存在直接发送验证码
+        UserInfo userInfo = userInfoDao.findByTelephone(telephone);
+        if (userInfo != null) {   //如果存在直接发送验证码
             smsCaptchaService.sendMsg(telephone);
-            ResultDTO resultDTO = new ResultDTO(200, "成功", new String(""));
-            return resultDTO;
+            return ResultDTO.success();
         } else {
             System.out.println("该手机号并未注册");
-            ResultDTO resultDTO = new ResultDTO(500, "账户不存在", new String(""));
-            return resultDTO;
+            return ResultDTO.error(CodeMsgDTO.USER_NOT_EXIST);
         }
 
     }
@@ -169,8 +163,8 @@ public class TestController {
     @PostMapping("/smsRegister")
     public ResultDTO smsRegister(@RequestParam("telephone") String telephone) {
         //判断电话是否已经注册
-        ShopInfoUsers shopInfoUsers = shopInfoUsersDao.findByTelephone(telephone);
-        if (shopInfoUsers == null) {
+        UserInfo userInfo = userInfoDao.findByTelephone(telephone);
+        if (userInfo == null) {
             //新建电话验证码
             smsCaptchaService.createSmsCaptcha(telephone);
 

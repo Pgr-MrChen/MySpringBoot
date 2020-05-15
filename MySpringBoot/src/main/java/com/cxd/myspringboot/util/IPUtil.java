@@ -1,5 +1,7 @@
 package com.cxd.myspringboot.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -10,6 +12,8 @@ import java.net.UnknownHostException;
  * @Author GerryMC
  * @Date: 2020/5/13 0013 14:43
  */
+
+@Slf4j
 public class IPUtil {
     public static String getIpAddr(HttpServletRequest request) {
         String ipAddress = null;
@@ -23,7 +27,7 @@ public class IPUtil {
             }
             if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
                 ipAddress = request.getRemoteAddr();
-                if (ipAddress.equals("127.0.0.1")) {
+                if (ipAddress.equals("127.0.0.1")||"0:0:0:0:0:0:0:1".equals(ipAddress)) {
                     // 根据网卡取本机配置的IP
                     InetAddress inet = null;
                     try {
