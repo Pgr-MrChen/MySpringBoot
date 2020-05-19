@@ -1,7 +1,7 @@
 package com.cxd.myspringboot.service;
 
 import com.cxd.myspringboot.dao.UserInfoDao;
-import com.cxd.myspringboot.dto.ShopUserDTO;
+import com.cxd.myspringboot.dto.UserDTO;
 import com.cxd.myspringboot.entity.UserInfo;
 import com.cxd.myspringboot.util.KeyUtil;
 import com.cxd.myspringboot.util.MD5Util;
@@ -25,23 +25,23 @@ public class UserInfoServiceTest {
 
     @Test
     public void createTest() {
-        ShopUserDTO shopUserDTO = new ShopUserDTO();
-        shopUserDTO.setUsername("Amos002");
-        shopUserDTO.setNickname("珂大妹");
-        shopUserDTO.setPassword("123456");
-        shopUserDTO.setTelephone("15111888341");
-        UserInfo result = userService.createShopUserByPwd(shopUserDTO);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("Amos002");
+        userDTO.setNickname("珂大妹");
+        userDTO.setPassword("123456");
+        userDTO.setTelephone("15111888341");
+        UserInfo result = userService.createShopUserByPwd(userDTO);
         Assert.assertNotNull(result);
     }
 
     @Test
     public void updateTest() {
-        ShopUserDTO shopUserDTO = new ShopUserDTO();
-        shopUserDTO.setToken(MD5Util.getMD5("JJ001", "sj"));
-        shopUserDTO.setUsername("JJ001");
-        shopUserDTO.setNickname(KeyUtil.getNickname());
-        shopUserDTO.setPassword(MD5Util.getMD5("1234567", ""));
-        UserInfo updateResult = userService.updateShopUser(shopUserDTO);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setToken(MD5Util.getMD5("JJ001", "sj"));
+        userDTO.setUsername("JJ001");
+        userDTO.setNickname(KeyUtil.getNickname());
+        userDTO.setPassword(MD5Util.getMD5("1234567", ""));
+        UserInfo updateResult = userService.updateShopUser(userDTO);
         Assert.assertNotNull(updateResult);
     }
 

@@ -4,7 +4,7 @@ import com.cxd.myspringboot.dao.UserInfoDao;
 import com.cxd.myspringboot.dao.PhonecodeDao;
 import com.cxd.myspringboot.dto.CodeMsgDTO;
 import com.cxd.myspringboot.dto.ResultDTO;
-import com.cxd.myspringboot.dto.ShopUserDTO;
+import com.cxd.myspringboot.dto.UserDTO;
 import com.cxd.myspringboot.entity.UserInfo;
 import com.cxd.myspringboot.entity.Phonecode;
 
@@ -35,7 +35,6 @@ public class TestController {
     @Autowired
     private SmsCaptchaService smsCaptchaService;
 
-
     @Value(value = "${spring.mail.username}")
     private String from;
 
@@ -52,28 +51,27 @@ public class TestController {
         Phonecode phonecode = phonecodeDao.findByTelephone(telephone);
         String yzm = phonecode.getCode();
         if (yzm.equals(code)) {
-            ShopUserDTO shopUserDTO = new ShopUserDTO();
-            shopUserDTO.setUsername(username);
-            shopUserDTO.setPassword(pwd);
-            shopUserDTO.setTelephone(telephone);
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUsername(username);
+            userDTO.setPassword(pwd);
+            userDTO.setTelephone(telephone);
 
             //判断用户名是否存在
-            if (userInfoDao.findByUsername(shopUserDTO.getUsername()) != null) {
-                log.info("【用户注册】 用户已存在。shopInfoUser={}", shopUserDTO);
-                return new ResultDTO(101, "用户已存在", new String(""));
+            if (userInfoDao.findByUsername(userDTO.getUsername()) != null) {
+                log.info("【用户注册】 用户已存在。shopInfoUser={}", userDTO);
+                return ResultDTO.success(CodeMsgDTO.USER_EXIST);
             }
             log.info("开始注册用户信息");
             //创建商户信息
-            UserInfo userInfo = userService.createShopUserByPwd(shopUserDTO);
+            UserInfo userInfo = userService.createShopUserByPwd(userDTO);
 
             log.info("开始创建用户token表");
             //创建token
             userTokenService.createToken(userInfo);
-            return new ResultDTO(102, "用户创建成功", new String(""));
+            return ResultDTO.success();
         } else {
             System.out.println("验证码错误");
-            ResultDTO resultDTO = new ResultDTO(500, "验证码错误", new String(""));
-            return resultDTO;
+            return ResultDTO.error(CodeMsgDTO.VER_CODE_ERROR);
         }
 
     }
@@ -133,14 +131,12 @@ public class TestController {
                 return resultDTO;
             } else {
                 System.out.println("验证码错误");
-                ResultDTO resultDTO = new ResultDTO(501, "验证码错误", new String(""));
-                return resultDTO;
+                return ResultDTO.error(CodeMsgDTO.VER_CODE_ERROR);
             }
         } else {
             System.out.println("该手机号并未注册");
             return ResultDTO.error(CodeMsgDTO.USER_NOT_EXIST);
         }
-
 
     }
 
@@ -171,12 +167,12 @@ public class TestController {
             //发送短信并存验证码
             Integer code = smsCaptchaService.sendMsg(telephone);
             if (code != 200) {
-                return new ResultDTO(104, "发送短信失败", new String(""));
+                return ResultDTO.error(CodeMsgDTO.SMS_ERROR);
             }
-            return new ResultDTO(200, "发送成功", new String(""));
+            return ResultDTO.success();
         }
 
-        return new ResultDTO(502, "手机号已注册", new String(""));
+        return ResultDTO.error(CodeMsgDTO.PHONE_EXIST);
     }
 
 

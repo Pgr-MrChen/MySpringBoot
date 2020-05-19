@@ -1,0 +1,92 @@
+/*头部共能*/
+._layout > ._header > {
+    padding: 0px 300px;
+}
+
+._layout > ._header > .func {
+    margin-right: 30px;
+}
+
+._layout > ._header > .func > .register {
+    border: 0;
+    background-color: transparent;
+    outline: none;
+    font-size: 16px;
+    float: right;
+    color: #cccccc;
+    cursor: pointer;
+}
+
+
+/*内容公共部分*/
+._layout > ._main > .main_login {
+    height: auto;
+    width: 350px;
+    margin-top: 50px;
+    margin-left: 120px;
+    float: left;
+}
+
+._layout > ._main > .main_login > .method {
+    font-size: 36px;
+}
+
+._layout > ._main > .main_login > .wrapper {
+    margin-top: 36px;
+}
+
+._layout > ._main > .main_login > .wrapper > div {
+    margin: 30px 0px;
+}
+
+._layout > ._main > .main_login > .wrapper > div > input {
+    width: 200px;
+    border: none;
+    border-bottom: 1px #cccccc solid;
+}
+
+._layout > ._main > .main_login > .wrapper > .login > button {
+    height: 30px;
+    border-radius: 10px;
+    solid-color: #cccccc;
+    cursor: pointer;
+}
+
+._layout > ._main > .main_login > .wrapper > .login > .login_btn {
+    width: 45px;
+    margin-right: 30px;
+}
+
+._layout > ._main > .main_login > .wrapper > .login > .switch_method {
+    width: 85px;
+}
+
+/*账户密码登陆*/
+._layout > ._main > .pwd_login {
+    display: block;
+}
+
+/*验证码登陆*/
+._layout > ._main > .captcha_login {
+    display: none;
+}
+
+._layout > ._main > .captcha_login > .wrapper > .input_captcha > input {
+    width: 130px;
+}
+
+._layout > ._main > .captcha_login > .wrapper > div > .send_code {
+    border: none;
+    color: white;
+    border-color: whitesmoke;
+    border-bottom: 1px #cccccc solid;
+    cursor: pointer;
+}
+
+
+/*图片部分*/
+._layout > ._main > .login_background > .but_img {
+    float: right;
+    /*height: 300px;
+    width: 400px;*/
+}

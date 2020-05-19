@@ -1,0 +1,14 @@
+server:
+  port: 8088
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/springboot_learn?useSSL=false
+    username: root
+    password: zallz4008161808*%&
+    driver-class-name: com.mysql.jdbc.Driver
+  #邮件发送配置
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    username: 757869100@qq.com
+    password: uiglcpsbumjebbhj

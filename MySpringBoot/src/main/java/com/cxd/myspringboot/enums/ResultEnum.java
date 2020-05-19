@@ -7,14 +7,15 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultEnum {
-    SHOPUSER_SEARCH_ERROR(10, "商店用户查找失败"),
-    SHOPUSER_CREATE_PWD_ERROR(11, "密码创建用户失败"),
-    SHOPUSER_CREATE_SMS_ERROR(12, "短信创建用户失败"),
-    SHOPUSER_UPDATE_ERROR(13, "修改用户失败"),
-    SHOPUSER_CREATE_TOKEN_ERROR(21, "商户新建token码失败"),
-    SHOPUSER_UPDATE_TOKEN_ERROR(22, "商户更新token码失败"),
-    SHOPUSER_CREATE_CODE_ERROR(31, "创建用户短信码失败"),
-    SHOPUSER_UPDATE_CODE_ERROR(32, "商户更新短信码失败"),
+    SYSTEM_DATA_SAVE_ERROR(2, "数据库保存数据操作失败"),
+    USER_SEARCH_ERROR(10, "商店用户查找失败"),
+    USER_CREATE_BY_PWD_ERROR(11, "通过密码创建用户失败"),
+    USER_CREATE_BY_SMS_ERROR(12, "短信创建用户失败"),
+    USER_UPDATE_ERROR(13, "修改用户失败"),
+    USER_CREATE_TOKEN_ERROR(21, "商户新建token码失败"),
+    USER_UPDATE_TOKEN_ERROR(22, "商户更新token码失败"),
+    USER_CREATE_CODE_ERROR(31, "创建用户短信码失败"),
+    USER_UPDATE_CODE_ERROR(32, "商户更新短信码失败"),
     ;
 
     private Integer code;

@@ -4,7 +4,7 @@ import com.cxd.myspringboot.enums.IsAuthEnum;
 import lombok.Data;
 
 @Data
-public class ShopUserDTO {
+public class UserDTO {
     //用户token码
     private String token;
 

@@ -1,6 +1,8 @@
 package com.cxd.myspringboot.service.impl;
 
+import com.cxd.myspringboot.dto.CodeMsgDTO;
 import com.cxd.myspringboot.service.MailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -13,75 +15,126 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 
-/**
- *
- * 发送邮件
- */
 @Service
+@Slf4j
 public class MailServiceImpl implements MailService {
-
-    @Value(value = "${spring.mail.username}")
-    private String from;
-
     @Autowired
     private JavaMailSender mailSender;
 
-    //发送文本邮件
+    @Value("${mail.fromMail.addr}")
+    private String from;
+
+    /**
+     * 发送文本邮件
+     * @param to
+     * @param subject
+     * @param content
+     * @return
+     */
     @Override
-    public String sendSimpleMail(String to, String subject, String content) {
+    public Integer sendSimpleMail(String to, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
         message.setFrom(from);
+        message.setTo(to);
         message.setSubject(subject);
         message.setText(content);
-        mailSender.send(message);
-        return "1";
+
+        try {
+            mailSender.send(message);
+            log.info("简单邮件已经发送。");
+            return CodeMsgDTO.RESULT_SUCCESS.getCode();
+        } catch (Exception e) {
+            log.error("发送简单邮件时发生异常！", e);
+        }
+        return CodeMsgDTO.RESULT_FAILED.getCode();
     }
 
-    //发送HTML邮件
+    /**
+     * 发送html邮件
+     * @param to
+     * @param subject
+     * @param content
+     */
     @Override
-    public String sendHtmlMail(String to, String subject, String content) throws MessagingException {
+    public Integer sendHtmlMail(String to, String subject, String content) {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(from);
-        helper.setSubject(subject);
-        helper.setTo(to);
-        helper.setText(content, true);
-        mailSender.send(message);
-        return "1";
+
+        try {
+            //true表示需要创建一个multipart message
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+            mailSender.send(message);
+            log.info("html邮件发送成功");
+            return CodeMsgDTO.RESULT_SUCCESS.getCode();
+        } catch (MessagingException e) {
+            log.error("发送html邮件时发生异常！", e);
+        }
+        return CodeMsgDTO.RESULT_FAILED.getCode();
     }
 
+
+    /**
+     * 发送带附件的邮件
+     * @param to
+     * @param subject
+     * @param content
+     * @param filePath
+     */
     @Override
-    public String sendAttachmentsMail(String to, String subject, String content, String filePath) throws MessagingException {
+    public Integer sendAttachmentsMail(String to, String subject, String content, String filePath) {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(from);
-        helper.setSubject(subject);
-        helper.setTo(to);
-        helper.setText(content, true);
 
-        FileSystemResource fileSystemResource = new FileSystemResource(new File(filePath));
-        String fileName = fileSystemResource.getFilename();
-        helper.addAttachment(fileName, fileSystemResource);
-        mailSender.send(message);
-        return "1";
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+
+            File file = new File(filePath);
+            //获取文件名
+            String fileName = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf("/") + 1);
+            helper.addAttachment(fileName, file);
+            mailSender.send(message);
+            log.info("带附件的邮件已经发送。");
+            return CodeMsgDTO.RESULT_SUCCESS.getCode();
+        } catch (MessagingException e) {
+            log.error("发送带附件的邮件时发生异常！", e);
+        }
+        return CodeMsgDTO.RESULT_FAILED.getCode();
     }
 
-    //发送有图片的邮件
+    /**
+     * 发送正文中有静态资源（图片）的邮件
+     * @param to
+     * @param subject
+     * @param content
+     * @param rscPath
+     * @param rscId
+     */
     @Override
-    public String sendInlineResourceMail(String to, String subject, String content, String rscPath, String rscId) throws MessagingException {
+    public Integer sendInlineResourceMail(String to, String subject, String content, String rscPath, String rscId) {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(from);
-        helper.setSubject(subject);
-        helper.setTo(to);
-        helper.setText(content, true);
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
 
-        FileSystemResource rsc = new FileSystemResource(new File(rscPath));
-        helper.addInline(rscId, rsc);
-        mailSender.send(message);
-        return "1";
+            FileSystemResource res = new FileSystemResource(new File(rscPath));
+            helper.addInline(rscId, res);
+
+            mailSender.send(message);
+            log.info("嵌入静态资源的邮件已经发送。");
+            return CodeMsgDTO.RESULT_SUCCESS.getCode();
+        } catch (MessagingException e) {
+            log.error("发送嵌入静态资源的邮件时发生异常！", e);
+        }
+        return CodeMsgDTO.RESULT_FAILED.getCode();
     }
-
 
 }

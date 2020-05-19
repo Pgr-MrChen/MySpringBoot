@@ -20,11 +20,21 @@ public class CodeMsgDTO {
     public static CodeMsgDTO SUCCESS = new CodeMsgDTO(200,"请求成功。");
     public static CodeMsgDTO TOKEN_ERROR = new CodeMsgDTO(400,"token验证失败。");
 
-    //返回结果集
-    public static CodeMsgDTO RESULT_FAILED = new CodeMsgDTO(2,"失败。");
-    public static CodeMsgDTO USER_NOT_EXIST = new CodeMsgDTO(3,"用户不存在。");
-    public static CodeMsgDTO USER_EXIST = new CodeMsgDTO(4,"用户已存在。");
+    //返回结果集 常用结果
+    public static CodeMsgDTO RESULT_FAILED = new CodeMsgDTO(0,"操作失败。");
+    public static CodeMsgDTO RESULT_SUCCESS = new CodeMsgDTO(1,"操作成功。");
+    //返回结果集 4001~4100登陆操作相关结果
+    public static CodeMsgDTO USER_NOT_EXIST = new CodeMsgDTO(4001,"用户不存在。");
+    public static CodeMsgDTO USER_EXIST = new CodeMsgDTO(4002,"用户已存在。");
+    public static CodeMsgDTO PHONE_NOT_EXIST = new CodeMsgDTO(4003,"电话不存在。");
+    public static CodeMsgDTO PHONE_EXIST = new CodeMsgDTO(4004,"电话已存在。");
+    public static CodeMsgDTO EMAIL_NOT_EXIST = new CodeMsgDTO(4005,"邮箱不存在。");
+    public static CodeMsgDTO EMAIL_EXIST = new CodeMsgDTO(4006,"邮箱已存在。");
+    public static CodeMsgDTO VER_CODE_ERROR = new CodeMsgDTO(4007,"验证码错误。");
+    public static CodeMsgDTO VER_CODE_EXPIRE = new CodeMsgDTO(4008,"验证码已过期。");
+    public static CodeMsgDTO SMS_ERROR = new CodeMsgDTO(4009,"发送短信失败。");
 
+    //返回结果集 4101~4200相关结果
 
     public CodeMsgDTO() {
     }

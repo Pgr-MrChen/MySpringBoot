@@ -34,7 +34,7 @@ public class SmsCaptchaServiceImpl implements SmsCaptchaService {
         String result = SmsUtil.sendMessage(telephone, code);
         JSONObject json = JSON.parseObject(result);
         Integer resCode = json.getInteger("code");
-        if (resCode != 200) {
+        if(resCode != 200) {
             log.error("【发送短信】发送短信错误");
             return resCode;
         } else {
