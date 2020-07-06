@@ -1,6 +1,6 @@
 package com.cxd.myspringboot.service.impl;
 
-import com.cxd.myspringboot.service.SmsCaptchaService;
+import com.cxd.myspringboot.service.PhoneSmsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +12,18 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SmsCaptchaServiceImplTest {
+public class PhoneSmsServiceImplTest {
     @Autowired
-    private SmsCaptchaService smsCaptchaService;
+    private PhoneSmsService phoneSmsService;
 
     @Test
     public void sendMsg() {
-        Integer result = smsCaptchaService.sendMsg("17323964195");
+        Integer result = phoneSmsService.sendMsg("17323964195");
         System.out.println(result);
     }
 
     @Test
     public void createSmsCaptcha() {
-        smsCaptchaService.createSmsCaptcha("17323964195");
+        phoneSmsService.createSmsCaptcha("17323964195");
     }
 }

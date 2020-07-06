@@ -1,6 +1,6 @@
 package com.cxd.myspringboot.service.impl;
 
-import com.cxd.myspringboot.dto.CodeMsgDTO;
+import com.cxd.myspringboot.dto.resultful.CodeMsgDTO;
 import com.cxd.myspringboot.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

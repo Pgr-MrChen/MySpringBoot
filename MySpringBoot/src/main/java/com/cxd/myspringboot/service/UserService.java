@@ -1,6 +1,6 @@
 package com.cxd.myspringboot.service;
 
-import com.cxd.myspringboot.dto.ResultDTO;
+import com.cxd.myspringboot.dto.resultful.ResultDTO;
 import com.cxd.myspringboot.dto.UserDTO;
 import com.cxd.myspringboot.entity.UserInfo;
 

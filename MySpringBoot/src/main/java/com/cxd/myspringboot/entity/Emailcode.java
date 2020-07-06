@@ -3,20 +3,18 @@ package com.cxd.myspringboot.entity;
 import lombok.Data;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * 短信验证码
+ * 邮箱验证码
  */
 @Entity
 @Data
-public class Phonecode {
+public class Emailcode {
     @Id
     private Long id;
 
-    private String telephone;
+    private String email;
 
     //短信验证码
     private String code;
@@ -24,6 +22,6 @@ public class Phonecode {
     //验证码过期时间
     private String timeout;
 
-    public Phonecode() {
+    public Emailcode() {
     }
 }

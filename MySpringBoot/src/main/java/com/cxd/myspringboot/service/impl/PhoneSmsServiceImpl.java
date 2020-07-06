@@ -2,10 +2,12 @@ package com.cxd.myspringboot.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cxd.myspringboot.dao.PhonecodeDao;
+import com.cxd.myspringboot.dto.resultful.CodeMsgDTO;
+import com.cxd.myspringboot.dto.resultful.ResultDTO;
 import com.cxd.myspringboot.entity.Phonecode;
 import com.cxd.myspringboot.enums.ResultEnum;
 import com.cxd.myspringboot.exception.MySpringBootException;
-import com.cxd.myspringboot.service.SmsCaptchaService;
+import com.cxd.myspringboot.service.PhoneSmsService;
 import com.cxd.myspringboot.util.KeyUtil;
 import com.cxd.myspringboot.util.SmsUtil;
 import com.alibaba.fastjson.JSON;
@@ -19,14 +21,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-public class SmsCaptchaServiceImpl implements SmsCaptchaService {
+public class PhoneSmsServiceImpl implements PhoneSmsService {
     @Autowired
     private PhonecodeDao phonecodeDao;
 
     //发送短信验证码
     @Override
     @Transactional
-    public Integer sendMsg(String telephone) {
+    public ResultDTO sendMsg(String telephone) {
+        //判断电话是否首次使用
+        Phonecode phonecode = phonecodeDao.findByTelephone(telephone);
+
+        if (phonecode != null) {
+            //判断验证码是否过期
+            if (phonecode.getTimeout().compareTo(System.currentTimeMillis() + "") > 0) {
+                log.info("验证码时间还未过期。");
+                return ResultDTO.success(CodeMsgDTO.VER_CODE_EXPIRE);
+            }
+        }
         //获取验证码
         String code = KeyUtil.getCaptcha();
 
@@ -49,7 +61,7 @@ public class SmsCaptchaServiceImpl implements SmsCaptchaService {
     //创建短信验证码关系表
     @Override
     @Transactional
-    public Phonecode createSmsCaptcha(String telephone) {
+    public ResultDTO verCode(String telephone, String code) {
         //判断电话是否已经存在
         Phonecode phonecode = phonecodeDao.findByTelephone(telephone);
         if (phonecode != null) {
@@ -61,7 +73,7 @@ public class SmsCaptchaServiceImpl implements SmsCaptchaService {
             Phonecode result = phonecodeDao.save(phonecode1);
             if (result == null) {
                 log.error("【创建验证码】创建短信验证码表失败。telephone={}", telephone);
-                throw new MySpringBootException(ResultEnum.SHOPUSER_CREATE_CODE_ERROR);
+                throw new MySpringBootException(ResultEnum.USER_CREATE_CODE_ERROR);
             }
             return result;
         }

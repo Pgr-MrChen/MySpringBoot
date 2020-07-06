@@ -1,4 +1,4 @@
-package com.cxd.myspringboot.dto;
+package com.cxd.myspringboot.dto.resultful;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +33,9 @@ public class CodeMsgDTO {
     public static CodeMsgDTO VER_CODE_ERROR = new CodeMsgDTO(4007,"验证码错误。");
     public static CodeMsgDTO VER_CODE_EXPIRE = new CodeMsgDTO(4008,"验证码已过期。");
     public static CodeMsgDTO SMS_ERROR = new CodeMsgDTO(4009,"发送短信失败。");
+    public static CodeMsgDTO USER_ERROR = new CodeMsgDTO(4010,"用户不合法。");
+    public static CodeMsgDTO PHONE_ERROR = new CodeMsgDTO(4011,"手机号不合法。");
+    public static CodeMsgDTO EMAIL_ERROR = new CodeMsgDTO(4012,"邮箱不合法。");
 
     //返回结果集 4101~4200相关结果
 

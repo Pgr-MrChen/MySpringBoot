@@ -1,4 +1,4 @@
-package com.cxd.myspringboot.dto;
+package com.cxd.myspringboot.dto.resultful;
 
 import lombok.Getter;
 import lombok.Setter;

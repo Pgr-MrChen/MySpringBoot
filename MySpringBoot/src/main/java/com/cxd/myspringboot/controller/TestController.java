@@ -2,14 +2,14 @@ package com.cxd.myspringboot.controller;
 
 import com.cxd.myspringboot.dao.UserInfoDao;
 import com.cxd.myspringboot.dao.PhonecodeDao;
-import com.cxd.myspringboot.dto.CodeMsgDTO;
-import com.cxd.myspringboot.dto.ResultDTO;
+import com.cxd.myspringboot.dto.resultful.CodeMsgDTO;
+import com.cxd.myspringboot.dto.resultful.ResultDTO;
 import com.cxd.myspringboot.dto.UserDTO;
 import com.cxd.myspringboot.entity.UserInfo;
 import com.cxd.myspringboot.entity.Phonecode;
 
 import com.cxd.myspringboot.service.UserService;
-import com.cxd.myspringboot.service.SmsCaptchaService;
+import com.cxd.myspringboot.service.PhoneSmsService;
 import com.cxd.myspringboot.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class TestController {
     private UserService userService;
 
     @Autowired
-    private SmsCaptchaService smsCaptchaService;
+    private PhoneSmsService phoneSmsService;
 
     @Value(value = "${spring.mail.username}")
     private String from;
@@ -146,7 +146,7 @@ public class TestController {
         //查询账户是否存在
         UserInfo userInfo = userInfoDao.findByTelephone(telephone);
         if (userInfo != null) {   //如果存在直接发送验证码
-            smsCaptchaService.sendMsg(telephone);
+            phoneSmsService.sendMsg(telephone);
             return ResultDTO.success();
         } else {
             System.out.println("该手机号并未注册");
@@ -162,10 +162,10 @@ public class TestController {
         UserInfo userInfo = userInfoDao.findByTelephone(telephone);
         if (userInfo == null) {
             //新建电话验证码
-            smsCaptchaService.createSmsCaptcha(telephone);
+            phoneSmsService.createSmsCaptcha(telephone);
 
             //发送短信并存验证码
-            Integer code = smsCaptchaService.sendMsg(telephone);
+            Integer code = phoneSmsService.sendMsg(telephone);
             if (code != 200) {
                 return ResultDTO.error(CodeMsgDTO.SMS_ERROR);
             }

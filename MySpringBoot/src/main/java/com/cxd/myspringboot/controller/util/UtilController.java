@@ -1,6 +1,6 @@
 package com.cxd.myspringboot.controller.util;
 
-import com.cxd.myspringboot.dto.ResultDTO;
+import com.cxd.myspringboot.dto.resultful.ResultDTO;
 import com.cxd.myspringboot.service.MailService;
 import com.cxd.myspringboot.util.IPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,7 @@ public class UtilController {
                               @RequestParam("type") Integer type) {
         if (type == 1) {
             //发送普通邮件(用于登录、注册时发送验证码)
+
         }
         if (type == 2) {
             //发送html邮件(用于找回密码等操作)

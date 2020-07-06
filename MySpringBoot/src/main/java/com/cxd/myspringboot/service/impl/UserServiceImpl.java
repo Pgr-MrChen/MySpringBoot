@@ -1,8 +1,8 @@
 package com.cxd.myspringboot.service.impl;
 
 import com.cxd.myspringboot.dao.UserInfoDao;
-import com.cxd.myspringboot.dto.CodeMsgDTO;
-import com.cxd.myspringboot.dto.ResultDTO;
+import com.cxd.myspringboot.dto.resultful.CodeMsgDTO;
+import com.cxd.myspringboot.dto.resultful.ResultDTO;
 import com.cxd.myspringboot.dto.UserDTO;
 import com.cxd.myspringboot.entity.UserInfo;
 import com.cxd.myspringboot.enums.ResultEnum;
@@ -44,27 +44,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResultDTO addUserByPwd(UserDTO userDTO) {
+        //验证参数合法性
+        if (userDTO == null) {
+            return ResultDTO.error(CodeMsgDTO.USER_ERROR);
+        }
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(userDTO, userInfo);
-        userInfo.setId(SnowFlakeUtil.getSnowFlakeId());
-        userInfo.setRoleId(userDTO.getRoleId());
         userInfo.setNickname(KeyUtil.getNickname());
-        String salt = KeyUtil.getSalt();  //获取唯一密码盐
-        userInfo.setSalt(salt);
-        userInfo.setNickname(KeyUtil.getNickname());
-        userInfo.setPassword(MD5Util.pwdMD5(userDTO.getPassword(), salt));
-        UserInfo result = userInfoDao.save(userInfo);
-        if (result == null) {
-            log.error("【用户注册】创建用户失败，userDTO={}", userDTO);
-            throw new MySpringBootException(ResultEnum.USER_CREATE_ERROR);
-        }
-        return ResultDTO.success();
+        return register(userInfo);
     }
 
     //短信注册
     @Override
     @Transactional
     public ResultDTO addUserBySms(String telephone) {
+        //判断手机号是否合法
+        if (telephone == null) {
+            return ResultDTO.error(CodeMsgDTO.PHONE_ERROR);
+        }
+        //验证短信
+        if ( == CodeMsgDTO.RESULT_FAILED)
+
         UserInfo userInfo = new UserInfo();
         userInfo.setId(SnowFlakeUtil.getSnowFlakeId());
         //userInfo.setRoleId(userInfo.getRoleId());  todo 设置角色
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         UserInfo result = userInfoDao.save(userInfo);
         if (result == null) {
             log.error("【用户注册】短信创建用户失败，telephone={}", telephone);
-            throw new MySpringBootException(ResultEnum.USER_CREATE_ERROR);
+            throw new MySpringBootException(ResultEnum.USER_CREATE_BY_SMS_ERROR);
         }
         return ResultDTO.success();
     }
